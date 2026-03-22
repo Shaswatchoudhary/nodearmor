@@ -1,6 +1,6 @@
 {
   "name": "nodearmor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Complete backend safety for Node.js — env validation, Argon2id hashing, Zod request validation, typed HTTP errors",
   "author": "Shaswat <kaushikchoudhary33@gmail.com>",
   "license": "MIT",
