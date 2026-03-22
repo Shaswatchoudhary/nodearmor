@@ -1,4 +1,4 @@
-// src/index.ts — final version, all four modules exported
+// src/index.ts
 export { envault } from "./env";
 export { hash, verify, needsRehash } from "./hash";
 export { guard, guardAll, createGuard } from "./guard";
@@ -9,3 +9,6 @@ export {
   UnprocessableEntity, TooManyRequests,
   InternalServerError, ServiceUnavailable,
 } from "./errors";
+
+// Export z from zod so users never need to install zod separately
+export { z } from "zod";
