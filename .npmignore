@@ -1,0 +1,10 @@
+src/
+tests/
+.github/
+try-it.mjs
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+*.log
+.env
+coverage/

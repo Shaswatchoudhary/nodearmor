@@ -1,10 +1,35 @@
 {
   "name": "nodearmor",
   "version": "1.0.0",
-  "description": "Complete backend safety — env validation, Argon2id hashing, Zod request validation, typed HTTP errors",
-  "author": "Shaswat",
+  "description": "Complete backend safety for Node.js — env validation, Argon2id hashing, Zod request validation, typed HTTP errors",
+  "author": "Shaswat <kaushikchoudhary33@gmail.com>",
   "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shaswatchoudhary/nodearmor"
+  },
+  "homepage": "https://github.com/Shaswatchoudhary/nodearmor#readme",
+  "bugs": {
+    "url": "https://github.com/Shaswatchoudhary/nodearmor/issues"
+  },
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "security",
+    "environment",
+    "validation",
+    "argon2",
+    "password",
+    "hashing",
+    "middleware",
+    "zod",
+    "express",
+    "errors",
+    "http-errors",
+    "backend",
+    "env"
+  ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
