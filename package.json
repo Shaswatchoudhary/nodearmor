@@ -1,0 +1,80 @@
+{
+  "name": "nodearmor",
+  "version": "1.0.0",
+  "description": "Complete backend safety — env validation, Argon2id hashing, Zod request validation, typed HTTP errors",
+  "author": "Shaswat",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    },
+    "./env": {
+      "types": "./dist/env/index.d.ts",
+      "require": "./dist/env/index.cjs",
+      "import": "./dist/env/index.js"
+    },
+    "./hash": {
+      "types": "./dist/hash/index.d.ts",
+      "require": "./dist/hash/index.cjs",
+      "import": "./dist/hash/index.js"
+    },
+    "./guard": {
+      "types": "./dist/guard/index.d.ts",
+      "require": "./dist/guard/index.cjs",
+      "import": "./dist/guard/index.js"
+    },
+    "./errors": {
+      "types": "./dist/errors/index.d.ts",
+      "require": "./dist/errors/index.cjs",
+      "import": "./dist/errors/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "env": [
+        "./dist/env/index.d.ts"
+      ],
+      "hash": [
+        "./dist/hash/index.d.ts"
+      ],
+      "guard": [
+        "./dist/guard/index.d.ts"
+      ],
+      "errors": [
+        "./dist/errors/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
+  },
+  "peerDependencies": {
+    "zod": ">=3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "argon2": "^0.31.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0",
+    "zod": "^3.22.0"
+  }
+}
