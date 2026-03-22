@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-000000.svg?style=flat-square&labelColor=000000)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5+-000000.svg?style=flat-square&labelColor=000000)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-000000.svg?style=flat-square&labelColor=000000)](https://nodejs.org)
-[![GitHub](https://img.shields.io/badge/GitHub-nodearmor-000000.svg?style=flat-square&labelColor=000000&logo=github&logoColor=white)](https://github.com/YOUR_GITHUB_USERNAME/nodearmor)
+[![GitHub](https://img.shields.io/badge/GitHub-nodearmor-000000.svg?style=flat-square&labelColor=000000&logo=github&logoColor=white)](https://github.com/Shaswatchoudhary/nodearmor)
 
 </div>
 
