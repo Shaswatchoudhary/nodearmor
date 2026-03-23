@@ -4,13 +4,13 @@
 
 **Complete backend safety for Node.js — from the first line your app runs to the last response it sends.**
 
-[![npm version](https://img.shields.io/npm/v/nodearmor.svg?style=flat-square&color=000000&labelColor=000000)](https://www.npmjs.com/package/nodearmor)
-[![npm downloads](https://img.shields.io/npm/dm/nodearmor.svg?style=flat-square&color=000000&labelColor=000000)](https://www.npmjs.com/package/nodearmor)
-[![npm downloads weekly](https://img.shields.io/npm/dw/nodearmor.svg?style=flat-square&color=000000&labelColor=000000)](https://www.npmjs.com/package/nodearmor)
-[![License: MIT](https://img.shields.io/badge/License-MIT-000000.svg?style=flat-square&labelColor=000000)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5+-000000.svg?style=flat-square&labelColor=000000)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-000000.svg?style=flat-square&labelColor=000000)](https://nodejs.org)
-[![GitHub](https://img.shields.io/badge/GitHub-nodearmor-000000.svg?style=flat-square&labelColor=000000&logo=github&logoColor=white)](https://github.com/Shaswatchoudhary/nodearmor)
+[![npm version](https://img.shields.io/npm/v/nodearmor.svg?style=flat-square&color=33cd56&labelColor=333333)](https://www.npmjs.com/package/nodearmor)
+[![npm downloads](https://img.shields.io/npm/dm/nodearmor.svg?style=flat-square&color=007ec6&labelColor=333333)](https://www.npmjs.com/package/nodearmor)
+[![npm downloads weekly](https://img.shields.io/npm/dw/nodearmor.svg?style=flat-square&color=808080&labelColor=333333)](https://www.npmjs.com/package/nodearmor)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&labelColor=333333)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5%2B-blue?style=flat-square&logo=typescript&logoColor=white&labelColor=333333)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-green?style=flat-square&logo=node.js&logoColor=white&labelColor=333333)](https://nodejs.org)
+[![GitHub](https://img.shields.io/badge/GitHub-nodearmor-181717?style=flat-square&labelColor=333333&logo=github&logoColor=white)](https://github.com/Shaswatchoudhary/nodearmor)
 </div>
 
 ---
