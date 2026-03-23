@@ -185,7 +185,6 @@ export function envault<S extends EnvSchema>(
     if (raw === undefined || raw === "") {
 
       // If a default value was provided, use it and move to the next field.
-      // "continue" in a for loop means "skip the rest of this iteration."
       if (field.default !== undefined) {
         result[key] = field.default;
         continue;
@@ -195,18 +194,19 @@ export function envault<S extends EnvSchema>(
       if (isRequired) {
         errors.push(
           field.message ?? `Missing required variable: "${key}"`
-          // ?? is the "nullish coalescing" operator.
-          // It means: use field.message if it exists, otherwise use the default message.
         );
       } else {
         // Optional field with no default and no value → set to undefined.
         result[key] = undefined;
       }
 
-      // Move to the next field regardless — no point checking the value
-      // because there is no value to check.
+      // Move to the next field regardless
       continue;
     }
+
+    // Prepare a display value for error messages.
+    // If it is a secret, we mask it to avoid leaking sensitive data in logs.
+    const displayValue = field.isSecret ? "********" : `"${raw}"`;
 
     // ── Type validation and coercion ──────────────────────
     // "raw" is now guaranteed to be a non-empty string.
@@ -223,7 +223,7 @@ export function envault<S extends EnvSchema>(
       // isNaN() checks if the conversion failed.
       if (isNaN(num)) {
         errors.push(
-          field.message ?? `"${key}" must be a valid number, got: "${raw}"`
+          field.message ?? `"${key}" must be a valid number, got: ${displayValue}`
         );
         continue; // Skip min/max checks — there is nothing to check
       }
@@ -246,18 +246,16 @@ export function envault<S extends EnvSchema>(
 
       // All checks passed — store the real number (not the string).
       result[key] = num;
-      continue;
     }
-
     // ── boolean ───────────────────────────────────────────
-    if (field.type === "boolean") {
+    else if (field.type === "boolean") {
 
       // Only these four strings are valid boolean representations.
       // .toLowerCase() ensures "True", "TRUE", "TRUE" all work.
       const valid = ["true", "false", "1", "0"];
       if (!valid.includes(raw.toLowerCase())) {
         errors.push(
-          field.message ?? `"${key}" must be true/false/1/0, got: "${raw}"`
+          field.message ?? `"${key}" must be true/false/1/0, got: ${displayValue}`
         );
         continue;
       }
@@ -265,50 +263,74 @@ export function envault<S extends EnvSchema>(
       // Convert to a real JavaScript boolean.
       // "true" and "1" → true. "false" and "0" → false.
       result[key] = raw === "true" || raw === "1";
-      continue;
     }
 
     // ── url ───────────────────────────────────────────────
-    if (field.type === "url") {
+    else if (field.type === "url") {
       if (!isValidUrl(raw)) {
         errors.push(
-          field.message ?? `"${key}" must be a valid URL, got: "${raw}"`
+          field.message ?? `"${key}" must be a valid URL, got: ${displayValue}`
         );
         continue;
       }
       // Valid URL — store the string as-is (it stays a string, not a URL object)
       result[key] = raw;
-      continue;
     }
 
     // ── email ─────────────────────────────────────────────
-    if (field.type === "email") {
+    else if (field.type === "email") {
       if (!isValidEmail(raw)) {
         errors.push(
-          field.message ?? `"${key}" must be a valid email, got: "${raw}"`
+          field.message ?? `"${key}" must be a valid email, got: ${displayValue}`
         );
         continue;
       }
       result[key] = raw;
-      continue;
+    }
+
+    // ── json ──────────────────────────────────────────────
+    else if (field.type === "json") {
+      try {
+        result[key] = JSON.parse(raw);
+      } catch {
+        errors.push(
+          field.message ?? `"${key}" must be a valid JSON string, got: ${displayValue}`
+        );
+        continue;
+      }
+    }
+
+    // ── array ─────────────────────────────────────────────
+    else if (field.type === "array") {
+      // Split by comma and trim each element. Filter out empty strings.
+      result[key] = raw.split(",").map(s => s.trim()).filter(Boolean);
+    }
+
+    // ── string (and fallthrough) ──────────────────────────
+    else {
+      result[key] = raw;
     }
 
     // ── enum check ────────────────────────────────────────
-    // This applies to type: "string" fields that have an enum list.
-    // We check it here AFTER the specific type checks so it works
-    // for string types. Number/boolean enums are not supported (uncommon need).
     if (field.enum && !field.enum.includes(raw)) {
       errors.push(
         field.message ??
-        `"${key}" must be one of [${field.enum.join(", ")}], got: "${raw}"`
+        `"${key}" must be one of [${field.enum.join(", ")}], got: ${displayValue}`
       );
       continue;
     }
 
-    // ── string (and url/email fallthrough) ────────────────
-    // If we reach this line, the value passed all checks.
-    // Store it as-is (already a string).
-    result[key] = raw;
+    // ── custom validation ─────────────────────────────────
+    if (field.validate) {
+      const validationResult = field.validate(result[key]);
+      if (validationResult !== true) {
+        const customMessage = typeof validationResult === "string" 
+          ? validationResult 
+          : `Invalid value for "${key}"`;
+        errors.push(field.message ?? customMessage);
+        continue;
+      }
+    }
   }
 
   // ── Error reporting ───────────────────────────────────────

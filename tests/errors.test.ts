@@ -21,6 +21,8 @@ import {
   TooManyRequests,
   InternalServerError,
   ServiceUnavailable,
+  BadGateway,
+  GatewayTimeout,
 } from "../src/errors";
 
 
@@ -75,8 +77,8 @@ describe("ApiError base class", () => {
 // ═══════════════════════════════════════════════════════════════
 describe("Pre-built error classes", () => {
 
-  // We test all 11 classes with a data-driven approach.
-  // Instead of writing 11 identical describe blocks, we define
+  // We test all 14 classes with a data-driven approach.
+  // Instead of writing 14 identical describe blocks, we define
   // the expected values in an array and loop over them.
   // This is cleaner and easier to maintain.
   const cases = [
@@ -92,6 +94,8 @@ describe("Pre-built error classes", () => {
     { Class: TooManyRequests, status: 429, code: "TOO_MANY_REQUESTS" },
     { Class: InternalServerError, status: 500, code: "INTERNAL_SERVER_ERROR" },
     { Class: ServiceUnavailable, status: 503, code: "SERVICE_UNAVAILABLE" },
+    { Class: BadGateway, status: 502, code: "BAD_GATEWAY" },
+    { Class: GatewayTimeout, status: 504, code: "GATEWAY_TIMEOUT" },
   ];
 
   // Loop over every class and run the same three checks for each

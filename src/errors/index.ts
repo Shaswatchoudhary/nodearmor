@@ -281,3 +281,25 @@ export class ServiceUnavailable extends ApiError {
     this.name = "ServiceUnavailable";
   }
 }
+
+
+// ── 502 Bad Gateway ───────────────────────────────────────────
+// The server, while acting as a gateway or proxy, received an
+// invalid response from the upstream server.
+export class BadGateway extends ApiError {
+  constructor(message: string, meta?: Meta) {
+    super(502, "BAD_GATEWAY", message, meta);
+    this.name = "BadGateway";
+  }
+}
+
+
+// ── 504 Gateway Timeout ───────────────────────────────────────
+// The server, while acting as a gateway or proxy, did not receive
+// a timely response from the upstream server.
+export class GatewayTimeout extends ApiError {
+  constructor(message: string, meta?: Meta) {
+    super(504, "GATEWAY_TIMEOUT", message, meta);
+    this.name = "GatewayTimeout";
+  }
+}

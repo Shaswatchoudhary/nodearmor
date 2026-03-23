@@ -307,10 +307,10 @@ describe("guardAll()", () => {
     expect(next).toHaveBeenCalledOnce();
   });
 
-  it("stops at the first failing target and does not call next()", () => {
+  it("collects errors from ALL failing targets and does not call next()", () => {
     const req = mockReq({
-      body: {},   // invalid — missing required fields
-      query: { page: "1" },
+      body: { email: "bad-email" }, // invalid body
+      query: { page: "not-a-number" }, // invalid query
     });
     const res = mockRes();
     const next = mockNext();
@@ -319,6 +319,16 @@ describe("guardAll()", () => {
 
     expect(next).not.toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(400);
+
+    const responseBody = (res.json as any).mock.calls[0][0];
+    
+    // Check that we have issues from both targets
+    // We expect field names like "body.password" or "query.page"
+    const bodyIssue = responseBody.issues.find((i: any) => i.field.startsWith("body"));
+    const queryIssue = responseBody.issues.find((i: any) => i.field.startsWith("query"));
+    
+    expect(bodyIssue).toBeDefined();
+    expect(queryIssue).toBeDefined();
   });
 });
 

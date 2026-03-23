@@ -53,7 +53,7 @@ No TypeScript types on `req.body`. Inconsistent error shapes across routes. bcry
 
 ## The Solution
 ```bash
-npm install nodearmor zod
+npm install nodearmor
 ```
 ```typescript
 import { envault }  from "nodearmor/env";
@@ -107,10 +107,10 @@ One package. Four independent modules. Install once, import only what you need.
 
 ## Installation
 ```bash
-npm install nodearmor zod
+npm install nodearmor
 ```
 
-`zod` is a peer dependency required for `nodearmor/guard`. All other dependencies are included automatically.
+All dependencies are included automatically.
 
 ---
 
@@ -491,7 +491,7 @@ app.listen(env.PORT, () => {
 
 | | bcrypt + joi + AppError | nodearmor |
 |---|------------------------|-----------|
-| Install | `npm install bcrypt joi` + copy-paste | `npm install nodearmor zod` |
+| Install | `npm install bcrypt joi` + copy-paste | `npm install nodearmor` |
 | Versions to track | 3 | 1 |
 | Docs to read | 3 | 1 |
 | TypeScript support | Mixed — some need `@types/*` | Native throughout |
@@ -500,11 +500,8 @@ app.listen(env.PORT, () => {
 
 ---
 
-## Requirements
-
 - Node.js 18 or higher
 - TypeScript 5+ (optional but recommended)
-- zod 3+ (peer dependency — required for `nodearmor/guard`)
 
 ---
 

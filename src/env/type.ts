@@ -7,8 +7,8 @@
 // ── EnvFieldType ──────────────────────────────────────────────
 // This is the list of ALL allowed types for an env variable.
 // When you write  { type: "number" }  TypeScript will only allow
-// one of these five strings — any typo becomes a compile error.
-export type EnvFieldType = "string" | "number" | "boolean" | "url" | "email";
+// one of these seven strings — any typo becomes a compile error.
+export type EnvFieldType = "string" | "number" | "boolean" | "url" | "email" | "array" | "json";
 
 
 // ── EnvField ──────────────────────────────────────────────────
@@ -27,8 +27,8 @@ export interface EnvField {
 
   // A fallback value if the variable is missing entirely.
   // If default is set and the variable is missing, no error is thrown.
-  // The union type means it can be any of these three JS primitives.
-  default?: string | number | boolean;
+  // The union type means it can be any of these JS primitives, arrays, or objects.
+  default?: string | number | boolean | any[] | Record<string, any>;
 
   // A custom error message that replaces the default one.
   // Example: instead of 'Missing required variable: "DB"'
@@ -47,6 +47,13 @@ export interface EnvField {
   // Maximum allowed value. Only works on type: "number".
   // If the number is above this, validation fails.
   max?: number;
+
+  // A custom validation function.
+  // Should return true if valid, or a string (error message) if invalid.
+  validate?: (value: any) => boolean | string;
+
+  // If true, the value will be masked in error messages to prevent leaking secrets.
+  isSecret?: boolean;
 }
 
 
@@ -61,17 +68,12 @@ export type EnvSchema = Record<string, EnvField>;
 // ── ResolveType ───────────────────────────────────────────────
 // This is a TypeScript "conditional type" — it maps each EnvFieldType
 // to its corresponding JavaScript type.
-//
-// Read it as: "IF T is 'number', the output type is number.
-//              IF T is 'boolean', the output type is boolean.
-//              Otherwise (string, url, email), the output type is string."
-//
-// This is what makes env.PORT a number and env.DEBUG a boolean
-// in your IDE — without you ever writing those types manually.
 type ResolveType<T extends EnvFieldType> =
   T extends "number" ? number :
   T extends "boolean" ? boolean :
-  string; // string, url, and email all stay as JavaScript strings
+  T extends "array" ? string[] :
+  T extends "json" ? any :
+  string;
 
 
 // ── ParsedEnv ─────────────────────────────────────────────────
@@ -79,17 +81,17 @@ type ResolveType<T extends EnvFieldType> =
 // It is a "mapped type" — it reads your schema and generates a new type
 // where every key maps to the correct JavaScript type.
 //
-// Example: if your schema is { PORT: { type: "number" } }
-// then ParsedEnv will produce the type: { PORT: number }
-//
-// The conditional inside handles optional fields:
-//   - if required: false → the type is T | undefined
-//   - if required is true (or not set) → the type is just T
+// The conditional logic:
+//   1. If the field HAS a default value, it is NEVER undefined at runtime.
+//   2. If it has NO default AND required is false, it CAN be undefined.
+//   3. Otherwise (required: true or not set), it is ALWAYS the type.
 export type ParsedEnv<S extends EnvSchema> = {
-  [K in keyof S]:          // for every key K in your schema S...
-  S[K]["required"] extends false
-  ? ResolveType<S[K]["type"]> | undefined   // optional → can be undefined
-  : ResolveType<S[K]["type"]>;              // required → always the type
+  [K in keyof S]:
+  S[K] extends { default: any }
+  ? ResolveType<S[K]["type"]>
+  : S[K]["required"] extends false
+    ? ResolveType<S[K]["type"]> | undefined
+    : ResolveType<S[K]["type"]>;
 };
 
 

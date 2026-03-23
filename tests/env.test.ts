@@ -305,4 +305,88 @@ describe("envault()", () => {
       expect(errorMessage).toContain("DATABASE_URL");
     });
   });
+
+  // ── Array type ──────────────────────────────────────────────
+  describe("type: array", () => {
+    it("converts a comma-separated string to an array of strings", () => {
+      process.env.ALLOWED_ORIGINS = "http://localhost:3000, https://example.com";
+      const env = envault({ ALLOWED_ORIGINS: { type: "array" } }, NO_DOTENV);
+      expect(env.ALLOWED_ORIGINS).toEqual(["http://localhost:3000", "https://example.com"]);
+    });
+
+    it("handles empty strings and spaces correctly", () => {
+      process.env.ALLOWED_ORIGINS = "a, , b,,c ";
+      const env = envault({ ALLOWED_ORIGINS: { type: "array" } }, NO_DOTENV);
+      expect(env.ALLOWED_ORIGINS).toEqual(["a", "b", "c"]);
+    });
+  });
+
+  // ── JSON type ───────────────────────────────────────────────
+  describe("type: json", () => {
+    it("parses a JSON string into an object", () => {
+      process.env.CONFIG = '{"port": 80, "host": "localhost"}';
+      const env = envault({ CONFIG: { type: "json" } }, NO_DOTENV);
+      expect(env.CONFIG).toEqual({ port: 80, host: "localhost" });
+    });
+
+    it("throws for invalid JSON", () => {
+      process.env.CONFIG = '{"invalid": json';
+      expect(() => envault({ CONFIG: { type: "json" } }, NO_DOTENV)).toThrow();
+    });
+  });
+
+  // ── Custom validation ───────────────────────────────────────
+  describe("validate function", () => {
+    it("passes when the validate function returns true", () => {
+      process.env.PORT = "3000";
+      const env = envault({
+        PORT: {
+          type: "number",
+          validate: (val) => (val as number) % 2 === 0 // only even ports
+        }
+      }, NO_DOTENV);
+      expect(env.PORT).toBe(3000);
+    });
+
+    it("throws when the validate function returns false", () => {
+      process.env.PORT = "3001";
+      expect(() => envault({
+        PORT: {
+          type: "number",
+          validate: (val) => (val as number) % 2 === 0
+        }
+      }, NO_DOTENV)).toThrow();
+    });
+
+    it("uses the custom error message returned by the validate function", () => {
+      process.env.PORT = "3001";
+      expect(() => envault({
+        PORT: {
+          type: "number",
+          validate: (val) => (val as number) % 2 === 0 ? true : "Port must be even"
+        }
+      }, NO_DOTENV)).toThrow("Port must be even");
+    });
+  });
+
+  // ── Secret masking ──────────────────────────────────────────
+  describe("isSecret: true", () => {
+    it("masks the value in error messages", () => {
+      process.env.API_KEY = "super-secret-123";
+      // Intentionally fail by setting wrong type
+      let errorMessage = "";
+      try {
+        envault({
+          API_KEY: {
+            type: "number",
+            isSecret: true
+          }
+        }, NO_DOTENV);
+      } catch (err) {
+        errorMessage = (err as Error).message;
+      }
+      expect(errorMessage).toContain("********");
+      expect(errorMessage).not.toContain("super-secret-123");
+    });
+  });
 });

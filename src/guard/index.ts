@@ -79,6 +79,9 @@ export function guardAll(
   options: GuardOptions = {}
 ): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
+    const allIssues: ValidationIssue[] = [];
+    const parsedData: Record<string, any> = {};
+
     // Loop through each target we want to validate
     for (const [target, schema] of Object.entries(targets)) {
       if (!schema) continue;
@@ -86,24 +89,40 @@ export function guardAll(
       const result = schema.safeParse(req[target as GuardTarget]);
 
       if (!result.success) {
-        const issues = result.error.issues.map((issue) => ({
-          field: issue.path.join(".") || "root",
-          message: issue.message,
-          code: issue.code,
-        }));
-
-        const errorBody = options.formatError
-          ? options.formatError(issues)
-          : formatZodError(result.error);
-
-        return res.status(options.status || 400).json(errorBody);
+        // Collect issues with target prefix for clarity when multiple targets fail
+        // e.g. "body.email" instead of just "email"
+        allIssues.push(
+          ...result.error.issues.map((issue) => ({
+            field: `${target}.${issue.path.join(".")}`.replace(/\.$/, "") || target,
+            message: issue.message,
+            code: issue.code,
+          }))
+        );
+      } else {
+        // Save parsed data to apply later only if all targets pass
+        parsedData[target] = result.data;
       }
-
-      // Success for this target — update the data
-      req[target as GuardTarget] = result.data;
     }
 
-    // All targets passed
+    if (allIssues.length > 0) {
+      // Use custom formatter if provided, otherwise use default shape
+      const errorBody = options.formatError
+        ? options.formatError(allIssues)
+        : {
+            status: options.status || 400,
+            code: "VALIDATION_FAILED",
+            message: "Request validation failed",
+            issues: allIssues,
+          };
+
+      return res.status(options.status || 400).json(errorBody);
+    }
+
+    // All targets passed — update the request object with cleaned data
+    for (const [target, data] of Object.entries(parsedData)) {
+      (req as any)[target] = data;
+    }
+
     next();
   };
 }
