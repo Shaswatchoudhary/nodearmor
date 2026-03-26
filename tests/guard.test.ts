@@ -1,4 +1,3 @@
-// tests/guard.test.ts
 // ─────────────────────────────────────────────────────────────
 // Tests for guard(), guardAll(), and createGuard().
 //

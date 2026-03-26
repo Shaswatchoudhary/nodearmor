@@ -1,7 +1,4 @@
-// tests/hash.test.ts
 // ─────────────────────────────────────────────────────────────
-// Tests for hash(), verify(), and needsRehash().
-//
 // NOTE ON SPEED:
 // These tests are intentionally slower than the env tests.
 // Argon2id with memoryCost: 65536 takes ~200-400ms per hash.

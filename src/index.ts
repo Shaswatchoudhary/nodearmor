@@ -1,4 +1,3 @@
-// src/index.ts
 export { envault } from "./env";
 export { hash, verify, needsRehash } from "./hash";
 export { guard, guardAll, createGuard } from "./guard";

@@ -1,4 +1,3 @@
-// src/hash/index.ts
 // ─────────────────────────────────────────────────────────────
 // This module wraps the argon2 library to provide dead-simple
 // password hashing using the Argon2id algorithm.

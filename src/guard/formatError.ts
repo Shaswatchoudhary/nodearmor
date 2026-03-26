@@ -1,10 +1,10 @@
-// src/guard/formatError.ts
 // ─────────────────────────────────────────────────────────────
 // This file has one job: take a Zod validation error and convert
 // it into a clean, consistent HTTP response object.
 //
 // WHY THIS IS A SEPARATE FILE:
-// The formatting logic is reused by guard(), guardAll(), and createGuard().
+// The formatting logic is reused by guard
+// (), guardAll(), and createGuard().
 // Keeping it separate means we test it once and use it everywhere.
 // If we ever want to change the error shape, we change it in one place.
 // ─────────────────────────────────────────────────────────────

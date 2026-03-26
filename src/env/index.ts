@@ -1,4 +1,3 @@
-// src/env/index.ts
 // ─────────────────────────────────────────────────────────────
 // This file contains the envault() function — the core of the env module.
 // It does three things:

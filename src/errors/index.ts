@@ -1,4 +1,3 @@
-// src/errors/index.ts
 // ─────────────────────────────────────────────────────────────
 // This file has two jobs:
 //   1. Re-export everything from ApiError.ts (the base + helpers)

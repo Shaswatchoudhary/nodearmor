@@ -1,4 +1,3 @@
-// src/errors/ApiError.ts
 // ─────────────────────────────────────────────────────────────
 // This file defines the BASE class that all nodearmor errors extend.
 // Think of it as the foundation — every specific error (NotFound,

@@ -1,4 +1,3 @@
-// src/guard/index.ts
 // ─────────────────────────────────────────────────────────────
 // This module provides Express middleware for validating incoming
 // requests using Zod schemas.

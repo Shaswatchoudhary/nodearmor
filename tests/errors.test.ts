@@ -1,4 +1,3 @@
-// tests/errors.test.ts
 // ─────────────────────────────────────────────────────────────
 // Tests for ApiError, all error classes, isApiError(), and toResponse().
 // ─────────────────────────────────────────────────────────────

@@ -1,4 +1,3 @@
-// tests/env.test.ts
 // ─────────────────────────────────────────────────────────────
 // Tests for the envault() function.
 // We use Vitest — it has the same API as Jest but runs much faster.
