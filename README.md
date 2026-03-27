@@ -11,7 +11,16 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5%2B-blue?style=flat-square&logo=typescript&logoColor=white&labelColor=333333)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-green?style=flat-square&logo=node.js&logoColor=white&labelColor=333333)](https://nodejs.org)
 [![GitHub](https://img.shields.io/badge/GitHub-nodearmor-181717?style=flat-square&labelColor=333333&logo=github&logoColor=white)](https://github.com/Shaswatchoudhary/nodearmor)
-</div>
+---
+
+## 🛡️ Security & Trust
+
+`nodearmor` is built with a **"Security-First"** philosophy, focusing on transparency and industry standards.
+
+- **Zero-Invention Architecture**: We don't invent our own crypto or validation. `nodearmor` is a thin, type-safe layer over **`argon2`** (C bindings to the reference implementation) and **`zod`** (the gold standard for TypeScript validation).
+- **OWASP-Compliant Defaults**: Argon2id parameters (12MB RAM, 3 iterations, 4 parallelism) are enforced by default, meeting modern security benchmarks.
+- **Supply Chain Protection**: We maintain a minimal dependency tree and run automated security audits on every release to prevent malicious injections.
+- **Open Source Transparency**: Our code is open, auditable, and focuses on eliminating boilerplates without hiding the underlying security logic.
 
 ---
 
